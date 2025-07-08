@@ -96,6 +96,8 @@ pub mod countries;
 pub mod data;
 pub mod endpoint;
 pub mod errors;
+use std::collections::HashMap;
+
 pub use client::*;
 
 use derive_builder::Builder;
@@ -164,6 +166,8 @@ pub struct HeaderParams {
     pub request_id: Option<String>,
     /// The media type. Required for operations with a request body.
     pub content_type: Option<String>,
+    #[builder(setter(strip_option))]
+    pub extra_headers: Option<HashMap<String, String>>,
 }
 
 #[derive(Debug, Serialize)]

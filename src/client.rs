@@ -1,7 +1,7 @@
 //! The paypal api wrapper client, which holds the http request client.
 
 use base64::Engine;
-use reqwest::header::{self, HeaderMap};
+use reqwest::header::{self, HeaderMap, HeaderName, HeaderValue};
 use serde::Deserialize;
 use std::time::Duration;
 use std::time::Instant;
@@ -167,6 +167,15 @@ impl Client {
 
         if let Some(content_type) = header_params.content_type {
             headers.append(header::CONTENT_TYPE, content_type.parse().unwrap());
+        }
+
+        if let Some(extra) = header_params.extra_headers {
+            for (key, value) in extra {
+                headers.append(
+                    HeaderName::from_bytes(key.as_bytes()).unwrap(),
+                    HeaderValue::from_str(&value).unwrap(),
+                );
+            }
         }
 
         Ok(builder.headers(headers))
